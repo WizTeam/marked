@@ -118,7 +118,8 @@ module.exports = class Lexer {
   /**
    * Lexing
    */
-  blockTokens(src, tokens = [], top = true) {
+  // wiz patch 2020-10-15 增加 parentTokenType 参数，针对 list 避免 换行后的文本被解析合并为前一行的内容
+  blockTokens(src, tokens = [], top = true, parentTokenType = '') {
     src = src.replace(/^ +$/gm, '');
     let token, i, l, lastToken;
 
@@ -176,7 +177,7 @@ module.exports = class Lexer {
       // blockquote
       if (token = this.tokenizer.blockquote(src)) {
         src = src.substring(token.raw.length);
-        token.tokens = this.blockTokens(token.text, [], top);
+        token.tokens = this.blockTokens(token.text, [], top, token.type);
         tokens.push(token);
         continue;
       }
@@ -186,7 +187,7 @@ module.exports = class Lexer {
         src = src.substring(token.raw.length);
         l = token.items.length;
         for (i = 0; i < l; i++) {
-          token.items[i].tokens = this.blockTokens(token.items[i].text, [], false);
+          token.items[i].tokens = this.blockTokens(token.items[i].text, [], false, token.type);
         }
         tokens.push(token);
         continue;
@@ -236,6 +237,9 @@ module.exports = class Lexer {
       if (token = this.tokenizer.text(src, tokens)) {
         src = src.substring(token.raw.length);
         if (token.type) {
+          tokens.push(token);
+        } else if (parentTokenType === 'list') {
+          token.type = 'text';
           tokens.push(token);
         } else {
           lastToken = tokens[tokens.length - 1];
