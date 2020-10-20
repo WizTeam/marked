@@ -226,7 +226,9 @@ module.exports = class Tokenizer {
         // Remove the list item's bullet
         // so it is seen as the next token.
         space = item.length;
-        item = item.replace(/^ *([*+-]|\d+[.)]) */, '');
+        // wiz patch 2020-10-20 bull 有效 text 前面的 空格不能被删除
+        // item = item.replace(/^ *([*+-]|\d+[.)]) */, '');
+        item = item.replace(/^ *([*+-]|\d+[.)])\s/, '');
 
         // Outdent whatever the
         // list item contains. Hacky.

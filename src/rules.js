@@ -16,7 +16,7 @@ const block = {
   blockquote: /^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/,
   // wiz patch 2020-10-15 list 支持序列之间存在若干空行，但 行首无空格的内容不能距离 序列内容超过一个空行
   // list: /^( {0,3})(bull) [\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull )\n*|\s*$)/,
-  list: /^( {0,3})(bull) [\s\S]+?(?:hr|def|(\n{2,}(?!(bull|(\s{2,})).|\n)+)(?! )(?!\1bull )\n*|\s*$)/,
+  list: /^( {0,3})(bull)[\s\S]+?(?:hr|def|(\n{2,}(?!(bull|(\s{2,})).|\n)+)(?! )(?!\1bull)\n*|\s*$)/,
   html: '^ {0,3}(?:' // optional indentation
     + '<(script|pre|style)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)' // (1)
     + '|comment[^\\n]*(\\n+|$)' // (2)
@@ -46,7 +46,7 @@ block.def = edit(block.def)
   .replace('title', block._title)
   .getRegex();
 
-block.bullet = /(?:[*+-]|\d{1,9}[.)])/;
+block.bullet = /(?:[*+-]|\d{1,9}[.)])\s/;
 block.item = /^( *)(bull) ?[^\n]*(?:\n(?!\1bull ?)[^\n]*)*/;
 block.item = edit(block.item, 'gm')
   .replace(/bull/g, block.bullet)
