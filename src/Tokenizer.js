@@ -230,13 +230,17 @@ module.exports = class Tokenizer {
         // item = item.replace(/^ *([*+-]|\d+[.)]) */, '');
         item = item.replace(/^ *([*+-]|\d+[.)])\s/, '');
 
+        space -= item.length;
         // Outdent whatever the
         // list item contains. Hacky.
         if (~item.indexOf('\n ')) {
-          space -= item.length;
+          // wiz patch 2020-10-20 bull 有效 text 前面的 空格不能被删除
+          // item = !this.options.pedantic
+          //   ? item.replace(new RegExp('^ {1,' + space + '}', 'gm'), '')
+          //   : item.replace(/^ {1,4}/gm, '');
           item = !this.options.pedantic
-            ? item.replace(new RegExp('^ {1,' + space + '}', 'gm'), '')
-            : item.replace(/^ {1,4}/gm, '');
+            ? item.replace(new RegExp('\\n\\s{1,' + space + '}', 'g'), '\n')
+            : item.replace(/\n\s{1,4}/g, '\n');
         }
 
         // Determine whether the next list item belongs here.
@@ -278,6 +282,7 @@ module.exports = class Tokenizer {
           task: istask,
           checked: ischecked,
           loose: loose,
+          spaceCount: space,
           text: item
         });
       }
