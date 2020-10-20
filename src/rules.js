@@ -9,7 +9,8 @@ const {
  */
 const block = {
   newline: /^\n+/,
-  code: /^( {4}[^\n]+\n*)+/,
+  // wiz patch 2020-10-20 屏蔽 4个空格识别为 code 的规则
+  // code: /^( {4}[^\n]+\n*)+/,
   fences: /^ {0,3}(`{3,}(?=[^`\n]*\n)|~{3,})([^\n]*)\n(?:|([\s\S]*?)\n)(?: {0,3}\1[~`]* *(?:\n+|$)|$)/,
   hr: /^ {0,3}((?:- *){3,}|(?:_ *){3,}|(?:\* *){3,})(?:\n+|$)/,
   heading: /^ {0,3}(#{1,6}) +([^\n]*?)(?: +#+)? *(?:\n+|$)/,
@@ -46,7 +47,9 @@ block.def = edit(block.def)
   .replace('title', block._title)
   .getRegex();
 
-block.bullet = /(?:[*+-]|\d{1,9}[.)])\s/;
+// wiz patch 2020-10-20 bull 有效 text 前面的 空格不能被删除
+block.bullet = /(?:[*+-]|\d{1,9}[.)])/;
+// block.bullet = /(?:[*+-]\s|\d{1,9}[.)]\s)/;
 block.item = /^( *)(bull) ?[^\n]*(?:\n(?!\1bull ?)[^\n]*)*/;
 block.item = edit(block.item, 'gm')
   .replace(/bull/g, block.bullet)
@@ -99,17 +102,22 @@ block.normal = merge({}, block);
 block.gfm = merge({}, block.normal, {
   nptable: '^ *([^|\\n ].*\\|.*)\\n' // Header
     + ' {0,3}([-:]+ *\\|[-| :]*)' // Align
-    + '(?:\\n((?:(?!\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)', // Cells
+    // wiz patch 2020-10-20 屏蔽 4个空格识别为 code 的规则
+    // + '(?:\\n((?:(?!\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)', // Cells
+    + '(?:\\n((?:(?!\\n|hr|heading|blockquote|fences|list|html).*(?:\\n|$))*)\\n*|$)', // Cells
   table: '^ *\\|(.+)\\n' // Header
     + ' {0,3}\\|?( *[-:]+[-| :]*)' // Align
-    + '(?:\\n *((?:(?!\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)' // Cells
+    // wiz patch 2020-10-20 屏蔽 4个空格识别为 code 的规则
+    // + '(?:\\n *((?:(?!\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)' // Cells
+    + '(?:\\n *((?:(?!\\n|hr|heading|blockquote|fences|list|html).*(?:\\n|$))*)\\n*|$)' // Cells
 });
 
 block.gfm.nptable = edit(block.gfm.nptable)
   .replace('hr', block.hr)
   .replace('heading', ' {0,3}#{1,6} ')
   .replace('blockquote', ' {0,3}>')
-  .replace('code', ' {4}[^\\n]')
+  // wiz patch 2020-10-20 屏蔽 4个空格识别为 code 的规则
+  // .replace('code', ' {4}[^\\n]')
   .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
   .replace('list', ' {0,3}(?:[*+-]|1[.)]) ') // only lists starting from 1 can interrupt
   .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|!--)')
@@ -120,7 +128,8 @@ block.gfm.table = edit(block.gfm.table)
   .replace('hr', block.hr)
   .replace('heading', ' {0,3}#{1,6} ')
   .replace('blockquote', ' {0,3}>')
-  .replace('code', ' {4}[^\\n]')
+  // wiz patch 2020-10-20 屏蔽 4个空格识别为 code 的规则
+  // .replace('code', ' {4}[^\\n]')
   .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
   .replace('list', ' {0,3}(?:[*+-]|1[.)]) ') // only lists starting from 1 can interrupt
   .replace('html', '</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|!--)')
