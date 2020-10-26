@@ -49,7 +49,7 @@ block.def = edit(block.def)
 
 // wiz patch 2020-10-20 bull 有效 text 前面的 空格不能被删除
 // block.bullet = /(?:[*+-]|\d{1,9}[.)])/;
-block.bullet = /(?:[*+-]\s|\d{1,9}[.)]\s)/;
+block.bullet = /(?:[*+-] ?|\d{1,9}[.)]( |$))/;
 // wiz patch 2020-10-22 尽量避免由于列表同级节点前面空格不一致，导致的解析错误
 // block.item = /^( *)(bull) ?[^\n]*(?:\n(?!\1bull ?)[^\n]*)*/;
 block.item = /^( *)(bull) ?[^\n]*(?:\n(?!\1?bull ?)[^\n]*)*/;

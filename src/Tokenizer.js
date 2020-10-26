@@ -228,7 +228,7 @@ module.exports = class Tokenizer {
         space = item.length;
         // wiz patch 2020-10-20 bull 有效 text 前面的 空格不能被删除
         // item = item.replace(/^ *([*+-]|\d+[.)]) */, '');
-        item = item.replace(/^ *([*+-]|\d+[.)])\s/, '');
+        item = item.replace(/^ *([*+-]|\d+[.)]) ?/, '');
 
         space -= item.length;
         // Outdent whatever the
@@ -239,8 +239,8 @@ module.exports = class Tokenizer {
           //   ? item.replace(new RegExp('^ {1,' + space + '}', 'gm'), '')
           //   : item.replace(/^ {1,4}/gm, '');
           item = !this.options.pedantic
-            ? item.replace(new RegExp('\\n\\s{1,' + space + '}', 'g'), '\n')
-            : item.replace(/\n\s{1,4}/g, '\n');
+            ? item.replace(new RegExp('\\n {1,' + space + '}', 'g'), '\n')
+            : item.replace(/\n {1,4}/g, '\n');
         }
 
         // Determine whether the next list item belongs here.
