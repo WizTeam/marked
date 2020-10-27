@@ -120,7 +120,9 @@ module.exports = class Lexer {
    */
   // wiz patch 2020-10-15 增加 parentTokenType 参数，针对 list 避免 换行后的文本被解析合并为前一行的内容
   blockTokens(src, tokens = [], top = true, parentTokenType = '') {
-    src = src.replace(/^ +$/gm, '');
+    // wiz patch 2020-10-27 避免 markdown 源码内的纯 空格的 行，全部被删除
+    // src = src.replace(/^ +$/gm, '');
+    src = src.replace(/^ +$/g, '');
     let token, i, l, lastToken;
 
     while (src) {
