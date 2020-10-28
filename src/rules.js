@@ -23,7 +23,7 @@ const block = {
   // abc
   //--------------------------
   // abc 不能被解析为 list 内的成员
-  list: /^( {0,3})(bull)[\s\S]+?(?:hr|def|\n{1,}(?!\s)(?!\1bull)\n*|\s*$)/,
+  list: /^( {0,3})(bull)[\s\S]+?(?:hr|def|\n{2,}(?! )(?!\1bull)\n*|\s*$)/,
   // wiz patch 2020-10-15 list 支持序列之间存在若干空行，但 行首无空格的内容不能距离 序列内容超过一个空行
   // list: /^( {0,3})(bull)[\s\S]+?(?:hr|def|(\n{2,}(?!(bull|( {2,})).)+)(?! )(?!\1bull)\n*|\s*$)/,
   html: '^ {0,3}(?:' // optional indentation

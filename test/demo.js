@@ -115,9 +115,14 @@ const Lexer = require('../src/Lexer');
 //   1. 有序列表 05
 // `;
 const markdown = `
-1. 456
+1. aaa
 
-1. 1. 1. a`;
+xxx
+
+   
+
+1. bbb
+`;
 console.log(markdown);
 const tokens = marked.lexer(markdown);
 console.log(tokens.length);

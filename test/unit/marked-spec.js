@@ -483,9 +483,9 @@ br
       ['del', '~~del~~'],
       ['text', 'del'],
       ['space', ''],
-      ['paragraph', 'brbr'],
+      ['paragraph', 'br'],
       ['text', 'br'],
-      ['br', ''],
+      ['paragraph', 'br'],
       ['text', 'br']
     ]);
   });

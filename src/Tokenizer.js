@@ -194,14 +194,19 @@ module.exports = class Tokenizer {
     if (cap) {
       let raw = cap[0];
       const bull = cap[2];
-      const isordered = bull.length > 1;
-      const isparen = bull[bull.length - 1] === ')';
+      // wiz patch 2020-10-28 配合 bull 规则修改
+      // const isordered = bull.length > 1;
+      // const isparen = bull[bull.length - 1] === ')';
+      const isordered = bull.length > 2;
+      const isparen = bull[bull.length - 2] === ')';
 
       const list = {
         type: 'list',
         raw,
         ordered: isordered,
-        start: isordered ? +bull.slice(0, -1) : '',
+        // wiz patch 2020-10-28 配合 bull 规则修改
+        // start: isordered ? +bull.slice(0, -1) : '',
+        start: isordered ? +bull.slice(0, -2) : '',
         loose: false,
         items: []
       };
@@ -247,8 +252,11 @@ module.exports = class Tokenizer {
         // Backpedal if it does not belong in this list.
         if (i !== l - 1) {
           b = this.rules.block.bullet.exec(itemMatch[i + 1])[0];
-          if (isordered ? b.length === 1 || (!isparen && b[b.length - 1] === ')')
-            : (b.length > 1 || (this.options.smartLists && b !== bull))) {
+          // wiz patch 2020-10-28 配合 bull 规则修改
+          // if (isordered ? b.length === 1 || (!isparen && b[b.length - 1] === ')')
+          //   : (b.length > 1 || (this.options.smartLists && b !== bull))) {
+          if (isordered ? b.length === 2 || (!isparen && b[b.length - 1] === ')')
+            : (b.length > 2 || (this.options.smartLists && b !== bull))) {
             addBack = itemMatch.slice(i + 1).join('\n');
             list.raw = list.raw.substring(0, list.raw.length - addBack.length);
             i = l - 1;

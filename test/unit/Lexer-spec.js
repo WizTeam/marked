@@ -48,14 +48,14 @@ describe('Lexer', () => {
   });
 
   describe('code', () => {
-    it('indented code', () => {
-      expectTokens({
-        md: '    code',
-        tokens: [
-          { type: 'code', raw: '    code', text: 'code', codeBlockStyle: 'indented' }
-        ]
-      });
-    });
+    // it('indented code', () => {
+    //   expectTokens({
+    //     md: '    code',
+    //     tokens: [
+    //       { type: 'code', raw: '    code', text: 'code', codeBlockStyle: 'indented' }
+    //     ]
+    //   });
+    // });
 
     it('fenced code', () => {
       expectTokens({
@@ -312,6 +312,7 @@ a | b
                 task: false,
                 checked: undefined,
                 loose: false,
+                spaceCount: 2,
                 text: 'item 1',
                 tokens: [{
                   type: 'text',
@@ -326,6 +327,7 @@ a | b
                 task: false,
                 checked: undefined,
                 loose: false,
+                spaceCount: 2,
                 text: 'item 2\n',
                 tokens: [{
                   type: 'text',
