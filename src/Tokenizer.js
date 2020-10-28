@@ -228,7 +228,7 @@ module.exports = class Tokenizer {
         space = item.length;
         // wiz patch 2020-10-20 bull 有效 text 前面的 空格不能被删除
         // item = item.replace(/^ *([*+-]|\d+[.)]) */, '');
-        item = item.replace(/^ *([*+-]|\d+[.)]) ?/, '');
+        item = item.replace(/^ *([*+-]|\d+[.)])( |$)/, '');
 
         space -= item.length;
         // Outdent whatever the
